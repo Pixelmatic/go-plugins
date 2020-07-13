@@ -25,15 +25,15 @@ type kregistry struct {
 var (
 	// used on pods as labels & services to select
 	// eg: svcSelectorPrefix+"svc.name"
-	svcSelectorPrefix = "micro.mu/selector-"
+	svcSelectorPrefix = "micro.inf/selector-"
 	svcSelectorValue  = "service"
 
-	labelTypeKey          = "micro.mu/type"
+	labelTypeKey          = "micro.inf/type"
 	labelTypeValueService = "service"
 
 	// used on k8s services to scope a serialised
 	// micro service by pod name
-	annotationServiceKeyPrefix = "micro.mu/service-"
+	annotationServiceKeyPrefix = "micro.inf/service-"
 
 	// Pod status
 	podRunning = "Running"
