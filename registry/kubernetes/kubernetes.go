@@ -30,6 +30,7 @@ var (
 
 	labelTypeKey          = "micro.inf/type"
 	labelTypeValueService = "service"
+	defaultDomain         = "inf"
 
 	// used on k8s services to scope a serialised
 	// micro service by pod name
@@ -115,6 +116,22 @@ func (c *kregistry) Register(s *registry.Service, opts ...registry.RegisterOptio
 	// TODO: grab podname from somewhere better than this.
 	podName := os.Getenv("HOSTNAME")
 	svcName := s.Name
+
+	// parse the options
+	var options registry.RegisterOptions
+	for _, o := range opts {
+		o(&options)
+	}
+	if len(options.Domain) == 0 {
+		options.Domain = defaultDomain
+	}
+
+	// set the domain in metadata so it can be retrieved by wildcard queries
+	if s.Metadata == nil {
+		s.Metadata = map[string]string{"domain": options.Domain}
+	} else {
+		s.Metadata["domain"] = options.Domain
+	}
 
 	// encode micro service
 	b, err := json.Marshal(s)
