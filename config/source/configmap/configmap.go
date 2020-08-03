@@ -49,7 +49,6 @@ func (k *configmap) Read() (*source.ChangeSet, error) {
 		Timestamp: cmp.CreationTimestamp.Time,
 	}
 	cs.Checksum = cs.Sum()
-
 	return cs, nil
 }
 
