@@ -36,15 +36,17 @@ func (wr *bodyWatcher) stream() {
 
 	// ignore first few messages from stream,
 	// as they are usually old.
-	ignore := true
-
 	go func() {
-		<-time.After(time.Second)
-		ignore = false
-	}()
-
-	go func() {
+		started := false
+		t := time.After(time.Second)
 		for {
+			if !started {
+				select {
+				case <-t:
+					started = true
+				default:
+				}
+			}
 			// read a line
 			b, err := reader.ReadBytes('\n')
 			if err != nil {
@@ -52,7 +54,7 @@ func (wr *bodyWatcher) stream() {
 			}
 
 			// ignore for the first second
-			if ignore {
+			if !started {
 				continue
 			}
 
