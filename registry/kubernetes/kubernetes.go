@@ -249,7 +249,7 @@ func (c *kregistry) ListServices(opts ...registry.ListOption) ([]*registry.Servi
 	}
 
 	// svcs mapped by name
-	svcs := make(map[string]bool)
+	svcs := make(map[string]*registry.Service)
 
 	for _, pod := range pods.Items {
 		if pod.Status.Phase != podRunning {
@@ -266,13 +266,23 @@ func (c *kregistry) ListServices(opts ...registry.ListOption) ([]*registry.Servi
 			if err := json.Unmarshal([]byte(*v), &svc); err != nil {
 				continue
 			}
-			svcs[svc.Name] = true
+			domain := registry.WildcardDomain
+			if dm, ok := svc.Metadata["domain"]; ok {
+				domain = dm
+			}
+			key := domain + "/" + svc.Name + "/" + svc.Version
+			s, ok := svcs[key]
+			if ok {
+				s.Nodes = append(s.Nodes, svc.Nodes...)
+			} else {
+				svcs[key] = &svc
+			}
 		}
 	}
 
 	var list []*registry.Service
-	for val := range svcs {
-		list = append(list, &registry.Service{Name: val})
+	for _, val := range svcs {
+		list = append(list, val)
 	}
 	return list, nil
 }
