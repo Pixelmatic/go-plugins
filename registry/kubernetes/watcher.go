@@ -227,7 +227,7 @@ func newWatcher(kr *kregistry, opts ...registry.WatchOption) (registry.Watcher, 
 	k := &k8sWatcher{
 		registry: kr,
 		watcher:  watcher,
-		next:     make(chan *registry.Result),
+		next:     make(chan *registry.Result, 10),
 		pods:     make(map[string]*client.Pod),
 	}
 
