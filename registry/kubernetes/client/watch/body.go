@@ -24,7 +24,6 @@ func (wr *bodyWatcher) ResultChan() <-chan Event {
 func (wr *bodyWatcher) Stop() {
 	select {
 	case <-wr.stop:
-		return
 	default:
 		close(wr.stop)
 		close(wr.results)
@@ -50,7 +49,7 @@ func (wr *bodyWatcher) stream() {
 			// read a line
 			b, err := reader.ReadBytes('\n')
 			if err != nil {
-				return
+				break
 			}
 
 			// ignore for the first second
@@ -61,7 +60,7 @@ func (wr *bodyWatcher) stream() {
 			// send the event
 			var event Event
 			if err := json.Unmarshal(b, &event); err != nil {
-				continue
+				break
 			}
 			wr.results <- event
 		}
