@@ -134,9 +134,11 @@ func (c *kregistry) Register(s *registry.Service, opts ...registry.RegisterOptio
 		s.Metadata["domain"] = options.Domain
 	}
 
-	for _, n := range s.Nodes {
-		log.Debugf("Registering node as %s/%s %s %s", options.Domain, s.Name, s.Version, n.Address)
-	}
+	/*
+		for _, n := range s.Nodes {
+			log.Debugf("Registering node as %s/%s %s %s", options.Domain, s.Name, s.Version, n.Address)
+		}
+	*/
 
 	// encode micro service
 	b, err := json.Marshal(s)

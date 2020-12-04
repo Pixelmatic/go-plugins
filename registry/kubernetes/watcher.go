@@ -46,7 +46,7 @@ func (k *k8sWatcher) handleEvent(event watch.Event) bool {
 		return false
 	}
 
-	log.Debugf("New k8s registry event %v %s %s", event.Type, pod.Metadata.Name, pod.Status.Phase)
+	// log.Debugf("New k8s registry event %v %s %s", event.Type, pod.Metadata.Name, pod.Status.Phase)
 
 	action := "delete"
 	switch event.Type {
