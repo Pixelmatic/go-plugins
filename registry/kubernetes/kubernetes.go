@@ -10,6 +10,7 @@ import (
 	"strings"
 	"time"
 
+	log "github.com/micro/go-micro/v2/logger"
 	"github.com/micro/go-plugins/registry/kubernetes/v2/client"
 
 	"github.com/micro/go-micro/v2/cmd"
@@ -133,6 +134,10 @@ func (c *kregistry) Register(s *registry.Service, opts ...registry.RegisterOptio
 		s.Metadata["domain"] = options.Domain
 	}
 
+	for _, n := range s.Nodes {
+		log.Infof("Registering node as %s/%s %s %s", options.Domain, s.Name, s.Version, n.Address)
+	}
+
 	// encode micro service
 	b, err := json.Marshal(s)
 	if err != nil {
@@ -164,6 +169,10 @@ func (c *kregistry) Register(s *registry.Service, opts ...registry.RegisterOptio
 func (c *kregistry) Deregister(s *registry.Service, opts ...registry.DeregisterOption) error {
 	if len(s.Nodes) == 0 {
 		return errors.New("you must deregister at least one node")
+	}
+
+	for _, n := range s.Nodes {
+		log.Infof("Deregistering node as %s/%s %s %s", s.Metadata["domain"], s.Name, s.Version, n.Address)
 	}
 
 	// TODO: grab podname from somewhere better than this.
