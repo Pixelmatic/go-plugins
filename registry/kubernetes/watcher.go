@@ -135,6 +135,8 @@ func (k *k8sWatcher) handleEvent(event watch.Event) {
 		return
 	}
 
+	log.Debugf("New k8s registry event %v %s", event.Type, event.Object)
+
 	switch event.Type {
 	case watch.Modified:
 		// Pod was modified
@@ -199,7 +201,6 @@ func (k *k8sWatcher) Stop() {
 
 	select {
 	case <-k.next:
-		return
 	default:
 		close(k.next)
 	}

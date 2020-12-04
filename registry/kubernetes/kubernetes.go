@@ -135,7 +135,7 @@ func (c *kregistry) Register(s *registry.Service, opts ...registry.RegisterOptio
 	}
 
 	for _, n := range s.Nodes {
-		log.Infof("Registering node as %s/%s %s %s", options.Domain, s.Name, s.Version, n.Address)
+		log.Debugf("Registering node as %s/%s %s %s", options.Domain, s.Name, s.Version, n.Address)
 	}
 
 	// encode micro service
@@ -172,7 +172,7 @@ func (c *kregistry) Deregister(s *registry.Service, opts ...registry.DeregisterO
 	}
 
 	for _, n := range s.Nodes {
-		log.Infof("Deregistering node as %s/%s %s %s", s.Metadata["domain"], s.Name, s.Version, n.Address)
+		log.Debugf("Deregistering node as %s/%s %s %s", s.Metadata["domain"], s.Name, s.Version, n.Address)
 	}
 
 	// TODO: grab podname from somewhere better than this.
